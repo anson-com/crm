@@ -816,12 +816,20 @@ section{position:relative;}
   .hero__cta .btn{flex:1 1 100%;}
   .hero__points{gap:12px;}
   .hero__points li{flex:1 1 100%;}
+  /* 新增 */
+  .hero h1{
+    font-size:clamp(24px, 7vw, 34px);
+  }
+  .hero h1 .grad{
+    white-space:nowrap; 
+ }
 
   .quote,.insight,.service{padding:26px 22px;}
   .case__body{padding:22px 20px 24px;}
 }
 
 @media (max-width:520px){
+  
   .footer__grid{grid-template-columns:1fr;}
   .trust__inner{gap:16px;}
   .footer__bottom{justify-content:center;text-align:center;}
