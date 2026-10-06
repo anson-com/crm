@@ -376,6 +376,7 @@ section{position:relative;}
 .pain-grid{
   display:grid;grid-template-columns:repeat(3,1fr);
   gap:20px;
+  counter-reset:pain;                 /* 编号计数器 */
 }
 .pain{
   position:relative;overflow:hidden;
@@ -384,14 +385,25 @@ section{position:relative;}
   border:1px solid var(--border);border-radius:var(--radius);
   transition:transform .4s var(--ease),border-color .4s,background .4s;
 
-  /* 图标 + 标题同一行，描述独立成行 */
+  /* 图标 + 编号 + 标题同一行，描述独立成行 */
   display:grid;
-  grid-template-columns:auto 1fr;
+  grid-template-columns:auto auto 1fr;
   grid-template-areas:
-    "icon  title"
-    "desc  desc";
+    "icon  no    title"
+    "desc  desc  desc";
   column-gap:16px;
   row-gap:20px;
+  align-items:center;
+
+  counter-increment:pain;             /* 每张卡片编号递增 */
+}
+.pain::before{
+  content:counter(pain, decimal-leading-zero);
+  grid-area:no;
+  font-size:12px;font-weight:700;letter-spacing:.14em;
+  color:#3d4a5a;
+  white-space:nowrap;
+  display:inline-flex;
   align-items:center;
 }
 .pain::after{
@@ -888,6 +900,36 @@ section{position:relative;}
   .stats__item:nth-child(1),.stats__item:nth-child(2){border-bottom:1px solid var(--border);}
 
   .process__grid{grid-template-columns:repeat(2,1fr);}
+
+  /* 新增：交付流程卡片，圆点与编号同一行 */
+  .step{
+    display:grid;
+    grid-template-columns:auto 1fr;
+    grid-template-areas:
+      "dot   no"
+      "title title"
+      "desc  desc";
+    column-gap:10px;
+    row-gap:8px;
+    align-items:center;
+  }
+  .step__dot{
+    grid-area:dot;
+    margin-bottom:0;
+  }
+  .step__no{
+    grid-area:no;
+    margin-bottom:0;
+  }
+  .step h4{
+    grid-area:title;
+    margin-bottom:0;
+  }
+  .step p{
+    grid-area:desc;
+  }
+  /* 新增结束 */
+
   .guarantee__list{grid-template-columns:1fr;}
   .form-grid{grid-template-columns:1fr;}
   .cases{grid-template-columns:1fr;}
@@ -895,15 +937,14 @@ section{position:relative;}
   .hero__cta .btn{flex:1 1 100%;}
   .hero__points{gap:12px;}
   .hero__points li{flex:1 1 100%;}
-  /* 新增 */
   .hero h1{
     font-size:clamp(24px, 7vw, 34px);
   }
   .hero h1 .grad{
-    white-space:nowrap; 
- }
+    white-space:nowrap;
+  }
 
-  .pain-grid{grid-template-columns:1fr;}   /* 新增 */
+  .pain-grid{grid-template-columns:1fr;}
   .services{grid-template-columns:1fr;}
 
   .quote,.insight,.service{padding:26px 22px;}
