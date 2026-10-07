@@ -888,6 +888,7 @@ section{position:relative;}
   .hero-badge--2{right:-2%;bottom:3%;}
 
   .pain-grid{grid-template-columns:repeat(2,1fr);}   /* 新增 */
+  .services{grid-template-columns:repeat(2,1fr);} /* 新增 */
 
   .guarantee{grid-template-columns:1fr;}
   .contact__inner{grid-template-columns:1fr;}
@@ -905,6 +906,10 @@ section{position:relative;}
   .form-note .note-break{display:block;}
   .process__grid{grid-template-columns:repeat(2,1fr);}
 
+#pain .section-head h2{
+  font-size:clamp(18px, 6.2vw, 24px);
+  white-space:nowrap;
+}
   /* 新增：交付流程卡片，圆点与编号同一行 */
   .step{
     display:grid;
@@ -986,11 +991,11 @@ section{position:relative;}
 
       <div class="nav__menu">
        <a href="#process">交付流程</a>
+  <a href="#pain">避坑指南</a><!--"#insights" -->
         <a href="#cases">案例作品</a>
         <a href="#services">服务能力</a>
         <a href="#guarantee">保障体系</a>
-        <a href="#process">客户评价</a>
-        <a href="#insights">避坑洞察</a>
+        <a href="#insights">客户评价</a>
         <a href="#contact">联系我们</a>
       </div>
 
@@ -1011,10 +1016,10 @@ section{position:relative;}
 <!-- 移动端菜单 -->
 <div class="mobile-menu" id="mobileMenu">
 <a href="#process">交付流程</a>
+  <a href="#pain">避坑指南</a><!--"#insights" -->
   <a href="#cases">案例作品</a>
   <a href="#services">服务能力</a>
   <a href="#guarantee">保障体系</a>
-  <a href="#insights">避坑洞察</a>
   <a href="#contact">联系我们</a>
   <a href="#contact" class="btn btn--primary btn--block">获取展台方案与预算</a>
 </div>
@@ -1256,9 +1261,7 @@ section{position:relative;}
       <span>医疗医美</span>
       <span>宠物礼品</span>
       <span>新能源</span>
-      <span>医疗医美</span>
       <span>工业制造</span>
-      <span>汽车零配件</span>
       <span>跨境出海</span>
       <span>活动美陈</span>
     </div>
@@ -1273,7 +1276,7 @@ section{position:relative;}
     <div class="section-head reveal">
       <span class="eyebrow">展商最担心的问题</span>
       <h2>展台出问题，从来不是设计问题，<br>而是交付的问题。</h2>
-      <p>我们做了十几年展台，听过太多客户踩过的坑。所以格众把每一个坑，都写进了标准流程里。</p>
+      <p>我们做了十几年展台，听过太多客户走过的弯路。所以格众把每一个坑，都写进了标准流程里。</p>
     </div>
 
     <div class="pain-grid">
@@ -1282,7 +1285,7 @@ section{position:relative;}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
         </div>
         <h3>效果图很美，落地打折扣</h3>
-        <p class="pain__answer">我们坚持 <b>设计工程一体化</b>，设计阶段就由结构工程师介入，出厂前 <b>1:1 工厂预搭</b>，拍照验收后再发货，所见即所得。</p>
+        <p class="pain__answer">我们坚持 <b>设计工程一体化</b>，设计阶段就由结构工程师介入，出厂前 <b>1:1 工厂预搭</b>，核验无误后再发运搭建，所见即所得。</p>
       </article>
 
       <article class="pain reveal" style="transition-delay:.06s">
@@ -1290,7 +1293,7 @@ section{position:relative;}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
         </div>
         <h3>预算不透明，现场疯狂增项</h3>
-        <p class="pain__answer"><b>清单式报价</b>，主材、人工、运输、报馆分项列明；合同锁定范围，任何变更走书面签证，<b>现场零隐形收费</b>。</p>
+        <p class="pain__answer"><b>清单式报价</b>，主材、人工、运输、报馆分项列明；合同锁定范围，任何变更提前走书面签证，<b>现场零隐形增项收费</b>。</p>
       </article>
 
       <article class="pain reveal" style="transition-delay:.12s">
@@ -1298,15 +1301,15 @@ section{position:relative;}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 15l2 2 4-4"/></svg>
         </div>
         <h3>报馆审批复杂，来回被退件</h3>
-        <p class="pain__answer">结构、消防、电气、材料证明全套资料由我方准备，<b>本地报馆团队</b>对接主办与场馆，一次通过，不占用客户时间。</p>
+        <p class="pain__answer">结构、消防、电气、材料证明全套资料由我方准备，<b>本地报馆团队</b>对接主办与场馆，高效通过，不占用耽误客户时间。</p>
       </article>
 
       <article class="pain reveal" style="transition-delay:.18s">
         <div class="pain__icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
         </div>
-        <h3>工期不可控，开展前还在赶工</h3>
-        <p class="pain__answer">工厂预制 + 现场装配，<b>里程碑节点管理</b>，关键节点提前 48 小时预警；预留应急班组，通宵抢工不额外收费。</p>
+        <h3>工期失控，开展前还在赶工</h3>
+        <p class="pain__answer">工厂预制 + 现场装配，<b>看得见得进度进程节点管理</b>，关键节点提前 48 小时预警；预留应急班组，科学统筹游刃有余。</p>
       </article>
 
       <article class="pain reveal" style="transition-delay:.24s">
@@ -1314,7 +1317,7 @@ section{position:relative;}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="M9 12l2 2 4-4"/></svg>
         </div>
         <h3>现场突发，没人能马上处理</h3>
-        <p class="pain__answer">每个项目配 <b>专属项目经理</b>，展期驻场；常备备用灯具、电源、五金与美工物料；全程投保展台责任险与意外险。</p>
+        <p class="pain__answer">每个项目 <b>专属一对一项目经理</b>，展期驻场；备用灯具、耗材、五金与美工物料；全程投保展台责任险与意外险。</p>
       </article>
     </div>
   </div>
@@ -1325,7 +1328,7 @@ section{position:relative;}
   <div class="container">
     <div class="section-head reveal">
       <span class="eyebrow">交付流程</span>
-      <h2>八步走完一个展台，<br>每一步都有交付物。</h2>
+      <h2>八步走完一个展台，<br>每一步都看得到有交付物。</h2>
       <p>你看得见进度，也看得见责任。每个节点都有明确的时间、交付物和配合服务。</p>
     </div>
 
@@ -1342,13 +1345,13 @@ section{position:relative;}
           <div class="step__dot"></div>
           <div class="step__no">STEP 02</div>
           <h4>创意设计</h4>
-          <p>3D 效果图、动线方案、平面布局、</p>
+          <p>3D 效果图、动线方案、平面布局、品牌赋能</p>
         </div>
         <div class="step reveal" style="transition-delay:.08s">
           <div class="step__dot"></div>
           <div class="step__no">STEP 03</div>
           <h4>预算报价</h4>
-          <p>清单式报价，逐项确定、无隐藏、无增项</p>
+          <p>清单式报价，逐项确定、透明无隐藏、无增项</p>
         </div>
         <div class="step reveal" style="transition-delay:.12s">
           <div class="step__dot"></div>
@@ -1360,7 +1363,7 @@ section{position:relative;}
           <div class="step__dot"></div>
           <div class="step__no">STEP 05</div>
           <h4>工厂预制</h4>
-          <p>1:1 预搭验收，完美呈现落地</p>
+          <p>1:1 预搭核验，完美呈现落地</p>
         </div>
         <div class="step reveal" style="transition-delay:.2s">
           <div class="step__dot"></div>
@@ -1378,7 +1381,7 @@ section{position:relative;}
           <div class="step__dot"></div>
           <div class="step__no">STEP 08</div>
           <h4>撤展复盘</h4>
-          <p>清场交付、物料回收、服务该进、效果复盘</p>
+          <p>清场交付、物料回收、服务回访、效果复盘、长期维护</p>
         </div>
       </div>
     </div>
@@ -1396,6 +1399,10 @@ section{position:relative;}
 
     <div class="case-toolbar reveal">
       <button class="filter is-active" data-filter="all">全部</button>
+      <button class="filter" data-filter="tech">科技电子</button>
+      <button class="filter" data-filter="energy">新能源</button>
+      <button class="filter" data-filter="medical">医疗器械</button>
+      <button class="filter" data-filter="industry">工业制造</button>
       <button class="filter" data-filter="tech">科技电子</button>
       <button class="filter" data-filter="energy">新能源</button>
       <button class="filter" data-filter="medical">医疗器械</button>
@@ -1484,7 +1491,7 @@ section{position:relative;}
     <div class="section-head reveal">
       <span class="eyebrow">服务能力</span>
       <h2>从一张图纸，到展会现场的最后一颗螺丝。</h2>
-      <p>六大核心服务模块，覆盖展台全生命周期。你可以全包给我们，也可以只选其中一环。</p>
+      <p>六大核心服务模块，覆盖展台全过程周期。你可以全包给我们，也可以选择其中环节。</p>
     </div>
 
     <div class="services">
@@ -1494,7 +1501,7 @@ section{position:relative;}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3Z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5Z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
         </div>
         <h3>展台创意设计</h3>
-        <p>不是好看，而是让观众停下来、走进来、留下线索。3D 效果图 + 施工图 + 动线规划一次交付。</p>
+        <p>不是好看，而是让观众停下来、走进来、留下线索。3D 效果图 +  动线规划 + 元素效果 一次交付。</p>
         <span class="service__link">查看设计流程
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </span>
@@ -1506,7 +1513,7 @@ section{position:relative;}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg>
         </div>
         <h3>展台搭建施工</h3>
-        <p>自有工厂预制，现场装配式施工。木作、型材、桁架、灯光、美工全工序自有班组，质量可验收。</p>
+        <p>自有工厂预制，现场装配式施工。木作、型材、桁架、灯光、美工全工序自有班组，质量可靠。</p>
         <span class="service__link">了解施工标准
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </span>
@@ -1518,7 +1525,7 @@ section{position:relative;}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h4"/></svg>
         </div>
         <h3>报馆报批代办</h3>
-        <p>结构计算书、消防材料证明、电气图、施工资质全套代办。国内外主流展馆均有成熟报馆通道。</p>
+        <p>结构计算书、消防材料证明、电气图、施工资质全套代办。国内外主流展馆均有专业报馆通道。</p>
         <span class="service__link">查看报馆清单
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </span>
@@ -1529,8 +1536,8 @@ section{position:relative;}
         <div class="service__ico">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20h20"/><path d="M4 20V9l6-4 6 4v11"/><path d="M16 20V12l4-2v10"/></svg>
         </div>
-        <h3>工厂预制与预搭</h3>
-        <p>深圳自有制作基地，出厂前 1:1 预搭验证结构与效果，客户可到场或视频验收，杜绝现场返工。</p>
+        <h3>工厂预制预搭</h3>
+        <p>自有制作工厂基地，出厂前 1:1 预搭验证结构与效果，确保高效无误，杜绝现场返工。</p>
         <span class="service__link">预约参观工厂
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </span>
@@ -1542,7 +1549,7 @@ section{position:relative;}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M2 12h20M12 2c2.5 3 2.5 17 0 20M12 2c-2.5 3-2.5 17 0 20"/></svg>
         </div>
         <h3>全球巡展搭建</h3>
-        <p>一套设计多国复用，模块化结构降低重复成本。覆盖德国、美国、中东、东南亚等主要展会市场。</p>
+        <p>可多国复用，模块化结构降低重复成本。覆盖德国、美国、中东、东南亚等主要展会市场。</p>
         <span class="service__link">查看海外案例
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </span>
@@ -1554,7 +1561,7 @@ section{position:relative;}
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 3.5 3L21 6"/></svg>
         </div>
         <h3>展期运营支持</h3>
-        <p>展前培训、现场礼仪、物料补给、设备巡检、数据采集、撤展清场，让客户专心谈客户。</p>
+        <p>展前服务、现场礼仪、物料补给、设备巡检、展期支持、撤展清场，让客户专心谈客户。</p>
         <span class="service__link">了解运营服务
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </span>
@@ -1573,7 +1580,7 @@ section{position:relative;}
           把"应该没问题"，<br>变成白纸黑字的承诺。
         </h2>
         <p style="color:var(--muted);font-size:15.5px;line-height:1.78;">
-          展会只有一次机会，没有彩排。格众用六项硬承诺，把风险留在工厂，把确定带到现场。
+          展会只有一次机会，没有彩排，没有重来。格众用六项硬承诺，把风险留在工厂，把确定带到现场。
         </p>
 
         <div class="guarantee__cta">
@@ -1590,15 +1597,15 @@ section{position:relative;}
           <div class="gitem__ico">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
           </div>
-          <h4>透明报价承诺</h4>
-          <p>分项清单报价，合同锁定范围，现场增项一律书面签证。</p>
+          <h4>透明报价</h4>
+          <p>分项清单报价，合同锁定范围，无隐藏增项一律提前书面签证。</p>
         </div>
 
         <div class="gitem">
           <div class="gitem__ico">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
           </div>
-          <h4>工期保障承诺</h4>
+          <h4>工期保障</h4>
           <p>节点延误按合同承担违约责任，应急班组随时待命。</p>
         </div>
 
@@ -1606,7 +1613,7 @@ section{position:relative;}
           <div class="gitem__ico">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg>
           </div>
-          <h4>安全合规承诺</h4>
+          <h4>安全合规</h4>
           <p>结构计算书、消防材料证明齐全，全程投保展台责任险。</p>
         </div>
 
@@ -1614,8 +1621,8 @@ section{position:relative;}
           <div class="gitem__ico">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
           </div>
-          <h4>效果还原承诺</h4>
-          <p>出厂前 1:1 预搭，实拍确认后再发运，落地与效果图一致。</p>
+          <h4>效果还原</h4>
+          <p>出厂前 1:1 预搭，核验无误后再发运搭建，落地与效果图一致。</p>
         </div>
 
         <div class="gitem">
@@ -1623,7 +1630,7 @@ section{position:relative;}
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
           </div>
           <h4>专属项目经理</h4>
-          <p>一个对接人负责到底，微信群里日报进度，随时可问。</p>
+          <p>一对一对接人负责到底，即时日更进度，随时可问。</p>
         </div>
 
         <div class="gitem">
@@ -1631,7 +1638,7 @@ section{position:relative;}
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg>
           </div>
           <h4>展期应急响应</h4>
-          <p>展期驻场 + 备用物料库，突发问题 30 分钟内到场处理。</p>
+          <p>展期驻场 + 备用物料库，突发问题 30 分钟响应处理。</p>
         </div>
       </div>
     </div>
@@ -1649,7 +1656,7 @@ section{position:relative;}
     <div class="quotes">
       <article class="quote reveal">
         <div class="quote__mark">"</div>
-        <p>最让我放心的是工厂预搭那一环。开展前一周我们就看到了实物照片，现场基本没有意外，这在海外展里太难得了。</p>
+        <p>最让我放心的是工厂预搭那一环。开展前一周我们就看到了实物照片，现场可靠没有意外，这在海外展里太难得了。</p>
         <div class="quote__by">
           <div class="quote__av">李</div>
           <div>
@@ -1673,12 +1680,12 @@ section{position:relative;}
 
       <article class="quote reveal" style="transition-delay:.12s">
         <div class="quote__mark">"</div>
-        <p>德国那次报馆资料很复杂，格众的同事全部代办，我们只签了个字。开展前三天搭建完成，还留了一天布展时间。</p>
+        <p>德国那次报馆资料很复杂，格众的同事全部代办，我们只签了个字。开展前两天搭建完成，还留了一天布展时间。</p>
         <div class="quote__by">
           <div class="quote__av">W</div>
           <div>
             <b>王女士</b>
-            <span>某医疗器械企业 · 国际业务总监</span>
+            <span>某汽车配件企业 · 国际业务总监</span>
           </div>
         </div>
       </article>
@@ -1690,7 +1697,7 @@ section{position:relative;}
 <section class="section" id="insights">
   <div class="container">
     <div class="section-head reveal">
-      <span class="eyebrow">避坑洞察</span>
+      <span class="eyebrow">资源洞察</span>
       <h2>参展这件事，先搞懂再花钱。</h2>
       <p>我们把十几年踩过的坑，整理成可以直接用的工具和清单，免费提供给参展企业。</p>
     </div>
@@ -1727,13 +1734,12 @@ section{position:relative;}
 </section>
 
 
-
 <!-- ======================= 联系表单 ======================= -->
 <section class="section contact" id="contact">
   <div class="container contact__inner">
     <div class="reveal">
       <span class="eyebrow">获取报价</span>
-      <h2>告诉我们你的展位，<br>24小时响应给您方案。</h2>
+      <h2>告诉我们您的展位，<br>24小时响应给您方案。</h2>
       <p class="contact__desc">
         填写下方信息，我们的项目经理会主动联系您，提供初步设计思路、搭建方案与费用区间。
         不收取任何前期费用，也不做电话骚扰。
@@ -1742,7 +1748,7 @@ section{position:relative;}
       <ul class="contact__points">
         <li>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
-          48 小时内响应，含初步方案与预算区间
+          24 小时内响应，含初步方案与预算区间
         </li>
         <li>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
@@ -1755,13 +1761,13 @@ section{position:relative;}
       </ul>
 
       <div class="contact__info">
-        <a href="tel:+8675588888888">
+        <a href="tel:+13168781081">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.9.3 1.9.6 2.9.7a2 2 0 0 1 1.7 2Z"/></svg>
           13168781081，13632770920
         </a>
-        <a href=gezhong@expo.com">
+        <a href="mailto:59253359@qq.com">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
-          hello@gezhong-expo.com
+          gezhong@expo.com
         </a>
         <span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.4-7-11a7 7 0 0 1 14 0c0 5.6-7 11-7 11Z"/><circle cx="12" cy="10" r="2.4"/></svg>
@@ -1869,11 +1875,21 @@ section{position:relative;}
           <a href="#" aria-label="微信">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8.7 4C4.9 4 2 6.5 2 9.6c0 1.8 1 3.3 2.6 4.4l-.6 2 2.3-1.2c.7.2 1.5.3 2.4.3h.6a5.5 5.5 0 0 1-.2-1.4c0-3 2.8-5.4 6.3-5.4h.6C15.4 5.6 12.4 4 8.7 4Zm-2.3 3a.9.9 0 1 1 0 1.8.9.9 0 0 1 0-1.8Zm4.6 0a.9.9 0 1 1 0 1.8.9.9 0 0 1 0-1.8Zm4.3 2.3c-3 0-5.5 2.1-5.5 4.7s2.5 4.7 5.5 4.7c.6 0 1.2-.1 1.8-.3l2 1.1-.5-1.7c1.4-.9 2.2-2.2 2.2-3.8 0-2.6-2.5-4.7-5.5-4.7Zm-1.9 2.4a.8.8 0 1 1 0 1.6.8.8 0 0 1 0-1.6Zm3.8 0a.8.8 0 1 1 0 1.6.8.8 0 0 1 0-1.6Z"/></svg>
           </a>
-          <a href="#" aria-label="领英">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5A2.5 2.5 0 1 0 5 8.5a2.5 2.5 0 0 0-.02-5ZM3 9h4v12H3zM9 9h3.8v1.7h.1c.5-.9 1.8-1.9 3.7-1.9 4 0 4.7 2.6 4.7 6V21h-4v-5.3c0-1.3 0-2.9-1.8-2.9s-2 1.4-2 2.8V21H9Z"/></svg>
-          </a>
+          <a href="#" aria-label="QQ">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c-3.3 0-5.6 2.5-5.6 5.6 0 .9-.3 1.5-.9 2.3-.7 1-1.5 2-1.5 4 0 1.9.9 3.3 2.5 4.1-.1.6-.1 1.3.1 1.8.2.5.7.7 1.4.7.7 0 1.6-.5 2.2-1.1.6.1 1.2.2 1.8.2s1.2-.1 1.8-.2c.6.6 1.5 1.1 2.2 1.1.7 0 1.2-.2 1.4-.7.2-.5.2-1.2.1-1.8 1.6-.8 2.5-2.2 2.5-4.1 0-2-.8-3-1.5-4-.6-.8-.9-1.4-.9-2.3C17.6 4.5 15.3 2 12 2Zm-2.1 6.5a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2Zm4.2 0a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2Z"/></svg>
+  </a>
+  
+  <a href="#" aria-label="邮件">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6Zm2.5.5L12 12l7.5-5.5h-15ZM20 8.4l-7.4 5.5a1 1 0 0 1-1.2 0L4 8.4V18h16V8.4Z"/></svg>
+  </a>
+<a href="#" aria-label="小红书">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 5.5A2.5 2.5 0 0 1 5.5 3h13A2.5 2.5 0 0 1 21 5.5v13a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 18.5v-13Zm4.1 2.2a.9.9 0 0 0-.9.9v6.8a.9.9 0 0 0 1.8 0V8.6a.9.9 0 0 0-.9-.9Zm2.9 1.8a.9.9 0 0 0-.9.9v5a.9.9 0 0 0 1.8 0v-5a.9.9 0 0 0-.9-.9Zm2.9-1.8a.9.9 0 0 0-.9.9v6.8a.9.9 0 0 0 1.8 0V8.6a.9.9 0 0 0-.9-.9Zm2.9 2.6a.9.9 0 0 0-.9.9v4.2a.9.9 0 0 0 1.8 0v-4.2a.9.9 0 0 0-.9-.9Z"/></svg>
+  </a>
           <a href="#" aria-label="抖音">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 2h-3v12.4a2.6 2.6 0 1 1-2.1-2.6V8.7a5.8 5.8 0 1 0 5.1 5.7V9.2a6.9 6.9 0 0 0 4 1.3V7.4a3.9 3.9 0 0 1-4-3.9V2Z"/></svg>
+          </a>
+<a href="#" aria-label="领英">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5A2.5 2.5 0 1 0 5 8.5a2.5 2.5 0 0 0-.02-5ZM3 9h4v12H3zM9 9h3.8v1.7h.1c.5-.9 1.8-1.9 3.7-1.9 4 0 4.7 2.6 4.7 6V21h-4v-5.3c0-1.3 0-2.9-1.8-2.9s-2 1.4-2 2.8V21H9Z"/></svg>
           </a>
         </div>
       </div>
@@ -1906,9 +1922,9 @@ section{position:relative;}
         <h5>资源洞察</h5>
         <ul>
           <li><a href="#insights">展台预算计算指南</a></li>
-          <li><a href="#insights">报馆材料清单</a></li>
-          <li><a href="#insights">全球展会日历</a></li>
+          <li><a href="#insights">报馆材料清单</a></li> 
           <li><a href="#guarantee">交付保障体系</a></li>
+<li><a href="#insights">全球展会日历</a></li>
           <li><a href="#contact">联系我们</a></li>
         </ul>
       </div>
@@ -1920,7 +1936,7 @@ section{position:relative;}
         <a href="#">隐私政策</a>
         <a href="#">服务条款</a>
         <a href="#">网站地图</a>
-        <a href="#">粤ICP备00000000号</a>
+        <a href="#">粤ICP备0000212630号</a>
       </nav>
     </div>
   </div>
