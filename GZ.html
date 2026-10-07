@@ -426,11 +426,9 @@ section{position:relative;}
   grid-area:title;
   font-size:16px;font-weight:600;color:#fff;
   margin-bottom:0;                    /* 原来 12px，改为 0 */
-  display:flex;align-items:center;gap:8px;
+    display:flex;align-items:center;
 }
-.pain h3::before{
-  content:"";width:5px;height:5px;border-radius:50%;background:#4a5665;flex-shrink:0;
-}
+
 .pain__answer{
   grid-area:desc;
   font-size:14.5px;color:var(--muted);line-height:1.72;position:relative;z-index:1;
@@ -671,6 +669,12 @@ section{position:relative;}
   background:linear-gradient(140deg,rgba(255,77,0,.1),rgba(255,77,0,.02));
 }
 .guarantee__cta p{font-size:14.5px;color:#d7dde6;line-height:1.72;margin-bottom:20px;}
+
+.guarantee__cta .btn{
+  display:flex;
+  width:fit-content;
+  margin-left:auto;
+}
 /* ============================================================
    客户评价
    ============================================================ */
@@ -880,8 +884,8 @@ section{position:relative;}
   .hero__inner{grid-template-columns:1fr;gap:52px;}
   .hero__visual{order:-1;max-width:460px;margin-inline:auto;}
   .hero__sub{max-width:none;}
-  .hero-badge--1{left:-2%;}
-  .hero-badge--2{right:-2%;}
+    .hero-badge--1{left:-2%;}
+  .hero-badge--2{right:-2%;bottom:3%;}
 
   .pain-grid{grid-template-columns:repeat(2,1fr);}   /* 新增 */
 
@@ -898,7 +902,7 @@ section{position:relative;}
   .stats__item:nth-child(3)::before,
   .stats__item:nth-child(4)::before{display:block;}
   .stats__item:nth-child(1),.stats__item:nth-child(2){border-bottom:1px solid var(--border);}
-
+  .form-note .note-break{display:block;}
   .process__grid{grid-template-columns:repeat(2,1fr);}
 
   /* 新增：交付流程卡片，圆点与编号同一行 */
@@ -952,10 +956,16 @@ section{position:relative;}
 }
 
 @media (max-width:520px){
-  
   .footer__grid{grid-template-columns:1fr;}
   .trust__inner{gap:16px;}
   .footer__bottom{justify-content:center;text-align:center;}
+
+  /* 页脚三个栏目的选项在移动端排成两列 */
+  .footer__col ul{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:13px 16px;
+  }
 }
 </style>
 </head>
@@ -1567,7 +1577,7 @@ section{position:relative;}
         </p>
 
         <div class="guarantee__cta">
-          <p>不确定预算够不够？把展位图发给我们，48小时内给出初步方案与费用区间。</p>
+          <p>不确定预算够不够？把展位图发给我们，24小时响应初步方案与费用区间。</p>
           <a href="#contact" class="btn btn--primary">
             免费获取预算评估
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
@@ -1723,7 +1733,7 @@ section{position:relative;}
   <div class="container contact__inner">
     <div class="reveal">
       <span class="eyebrow">获取报价</span>
-      <h2>告诉我们你的展位，<br>48小时内给您方案。</h2>
+      <h2>告诉我们你的展位，<br>24小时响应给您方案。</h2>
       <p class="contact__desc">
         填写下方信息，我们的项目经理会主动联系您，提供初步设计思路、搭建方案与费用区间。
         不收取任何前期费用，也不做电话骚扰。
@@ -1831,8 +1841,8 @@ section{position:relative;}
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </button>
             <p class="form-note">
-              我们承诺严格保护您的信息，仅用于本次方案沟通。也可直接致电 <b>0755-8888 8888</b>
-            </p>
+  我们承诺严格保护您的信息，仅用于本次方案沟通。<span class="note-break">也可以直接致电 <b>13632770920</b></span>
+</p>
           </div>
         </div>
       </form>
@@ -1869,7 +1879,7 @@ section{position:relative;}
       </div>
 
       <div class="footer__col">
-        <h5>服务</h5>
+        <h5>服务支持</h5>
         <ul>
           <li><a href="#services">展台创意设计</a></li>
           <li><a href="#services">展台搭建施工</a></li>
@@ -1881,18 +1891,19 @@ section{position:relative;}
       </div>
 
       <div class="footer__col">
-        <h5>案例</h5>
+        <h5>案例展示</h5>
         <ul>
-          <li><a href="#cases">科技电子展台</a></li>
           <li><a href="#cases">新能源展台</a></li>
-          <li><a href="#cases">医疗器械展台</a></li>
+          <li><a href="#cases">电子科技展台</a></li>
+          <li><a href="#cases">医疗医美展台</a></li>
           <li><a href="#cases">工业制造展台</a></li>
           <li><a href="#cases">海外展台搭建</a></li>
+          <li><a href="#cases">会议活动美陈</a></li>
         </ul>
       </div>
 
       <div class="footer__col">
-        <h5>资源与支持</h5>
+        <h5>资源洞察</h5>
         <ul>
           <li><a href="#insights">展台预算计算指南</a></li>
           <li><a href="#insights">报馆材料清单</a></li>
