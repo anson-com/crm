@@ -143,9 +143,11 @@ section{position:relative;}
 .logo{display:flex;align-items:center;gap:12px;flex-shrink:0;}
 .logo__mark{
   width:38px;height:38px;flex-shrink:0;
-  background:transparent;
-  border-radius:0;
-  box-shadow:none;
+  padding:3px;                        /* LOGO 与橙色边缘的留白 */
+  box-sizing:border-box;
+  background:linear-gradient(140deg,#FF4D00,#FF8A3D);
+  border-radius:11px;
+  box-shadow:0 6px 20px -8px rgba(255,77,0,.9);
   display:block;
 }
 .logo__text{display:flex;flex-direction:column;line-height:1.15;}
