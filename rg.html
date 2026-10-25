@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>日晷 · 三线日规划器 v2</title>
+<title>日晷 · 三线日规划器 v3</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -62,32 +62,34 @@
   .header-mid { display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0; }
   .date-text { color: var(--muted); font-size: 13px; white-space: nowrap; }
   .hint { font-size: 12px; color: #5b6474; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .header-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
-  .reminder-btn {
-    width: 34px; height: 34px;
+
+  .header-tags { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+  .header-tag {
+    display: inline-flex; align-items: center; justify-content: center;
     background: var(--panel-2);
     border: 1px solid var(--border);
     border-radius: 8px;
+    padding: 6px 13px;
+    color: var(--muted);
+    font-size: 12.5px;
+    font-family: inherit;
     cursor: pointer;
-    font-size: 15px;
-    display: flex; align-items: center; justify-content: center;
-    opacity: .5;
-    transition: .18s;
-  }
-  .reminder-btn:hover { opacity: .8; }
-  .reminder-btn.on {
-    opacity: 1;
-    border-color: #f0a868;
-    background: rgba(240,168,104,.13);
-    box-shadow: 0 0 10px rgba(240,168,104,.35);
-  }
-  .view-switch { display: flex; background: var(--panel-2); border-radius: 8px; padding: 3px; border: 1px solid var(--border); flex-shrink: 0; }
-  .vs-btn {
-    background: none; border: none; color: var(--muted); font-size: 12.5px;
-    padding: 5px 14px; border-radius: 6px; cursor: pointer; font-family: inherit;
     transition: .15s;
+    white-space: nowrap;
   }
-  .vs-btn.active { background: #2a303c; color: var(--text); }
+  .header-tag:hover { color: var(--text); }
+  .header-tag.active { background: #2a303c; color: var(--text); }
+  #reminderBtn.on {
+    color: #ffd0a8;
+    border-color: rgba(240,168,104,.5);
+    background: rgba(240,168,104,.12);
+  }
+
+  .mobile-only { display: none !important; }
+  @media (max-width: 720px) {
+    .desktop-only { display: none !important; }
+    button.mobile-only { display: inline-flex !important; }
+  }
 
   /* ---------- layout ---------- */
   main {
@@ -199,7 +201,6 @@
   .block.conflict .block-path { stroke: var(--danger); stroke-width: 2.2; animation: conflictPulse 1.6s ease-in-out infinite; }
   @keyframes conflictPulse { 0%,100% { fill-opacity: .18; } 50% { fill-opacity: .46; } }
 
-  /* 进行中：发光常亮 */
   .block.active .block-path {
     stroke-width: 2.5;
     animation: activeGlow 2.2s ease-in-out infinite;
@@ -213,13 +214,6 @@
       fill-opacity: .62;
       filter: drop-shadow(0 0 10px var(--c)) drop-shadow(0 0 20px var(--c)) drop-shadow(0 0 28px var(--c));
     }
-  }
-  .block.active.selected .block-path {
-    animation: activeGlowSel 2.2s ease-in-out infinite;
-  }
-  @keyframes activeGlowSel {
-    0%, 100% { fill-opacity: .44; filter: drop-shadow(0 0 6px var(--c)) drop-shadow(0 0 12px var(--c)); }
-    50% { fill-opacity: .66; filter: drop-shadow(0 0 12px var(--c)) drop-shadow(0 0 24px var(--c)); }
   }
 
   .handle {
@@ -309,7 +303,7 @@
     50% { box-shadow: 0 0 10px var(--c), 0 0 18px var(--c); }
   }
   .bl-item.active .bl-title { color: #fff; }
-  .bl-time { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; flex-shrink: 0; width: 78px; }
+  .bl-time { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; flex-shrink: 0; width: 82px; }
   .bl-title { font-size: 12.5px; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .bl-del {
     background: none; border: none; color: #4e5768; font-size: 15px;
@@ -324,7 +318,7 @@
   .editor-card {
     position: absolute;
     right: 16px; bottom: 16px;
-    width: 246px;
+    width: 252px;
     background: var(--panel);
     border: 1px solid var(--border);
     border-radius: 13px;
@@ -380,7 +374,79 @@
     white-space: nowrap;
   }
 
-  /* ---------- 响应式：平板 / 手机 ---------- */
+  /* ---------- 添加抽屉 ---------- */
+  .add-drawer {
+    position: fixed; inset: 0; z-index: 500;
+    display: flex; flex-direction: column; justify-content: flex-end;
+  }
+  .drawer-backdrop {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,.45);
+    backdrop-filter: blur(2px);
+    animation: fadeIn .2s ease-out;
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .drawer-panel {
+    position: relative;
+    background: var(--panel);
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
+    max-height: 68vh;
+    display: flex; flex-direction: column;
+    animation: drawerUp .24s cubic-bezier(.4,0,.2,1);
+    box-shadow: 0 -10px 40px rgba(0,0,0,.5);
+  }
+  @keyframes drawerUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .drawer-head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 16px 20px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .drawer-head h3 { font-size: 14px; font-weight: 600; }
+  .drawer-close {
+    background: none; border: none; color: var(--muted);
+    font-size: 24px; cursor: pointer; line-height: 1;
+    padding: 0 4px;
+  }
+  .drawer-close:hover { color: var(--text); }
+  .drawer-body {
+    padding: 14px 20px 22px;
+    overflow-y: auto;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .drawer-inbox {
+    display: flex; flex-direction: column; gap: 8px;
+    min-height: 80px;
+  }
+  .drawer-task {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--c);
+    border-radius: 10px;
+    padding: 11px 12px;
+  }
+  .dt-title { flex: 1; min-width: 0; font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dt-dur { font-size: 11px; color: var(--muted); flex-shrink: 0; }
+  .dt-add {
+    width: 30px; height: 30px; flex-shrink: 0;
+    background: var(--c-soft);
+    border: 1px solid var(--c);
+    border-radius: 50%;
+    color: var(--c);
+    font-size: 18px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    line-height: 1;
+    transition: .15s;
+  }
+  .dt-add:hover { background: var(--c); color: #fff; }
+  .drawer-empty {
+    text-align: center; color: #4e5768; font-size: 12.5px;
+    padding: 26px 10px; line-height: 1.7;
+  }
+
+  /* ---------- 响应式 ---------- */
   @media (max-width: 1080px) {
     main {
       grid-template-columns: 1fr;
@@ -402,28 +468,36 @@
     }
   }
   @media (max-width: 720px) {
-    header { height: 52px; padding: 0 13px; gap: 10px; }
+    header { height: 52px; padding: 0 12px; gap: 10px; }
     .brand span { display: none; }
     .date-text { font-size: 12px; }
-    .header-mid { gap: 8px; }
-    .reminder-btn { width: 32px; height: 32px; font-size: 14px; }
-    .vs-btn { padding: 5px 11px; font-size: 12px; }
-    main { padding: 10px 10px 20px; gap: 10px; }
-    .canvas { height: 78vw; max-height: 400px; min-height: 260px; }
-    .panel { padding: 13px; }
-    .inbox-list { max-height: 200px; }
-    .block-list { max-height: 220px; }
-    .bl-time { width: 70px; font-size: 10.5px; }
+    .header-mid { gap: 6px; }
+    .header-tag { padding: 6px 11px; font-size: 12px; }
+    main {
+      grid-template-columns: 1fr;
+      grid-template-areas: "canvas" "side";
+      overflow-y: auto;
+      height: auto;
+      min-height: calc(100vh - 52px);
+      padding: 10px;
+      gap: 10px;
+    }
+    .inbox-panel { display: none; }
+    .canvas { height: 78vw; max-height: 420px; min-height: 280px; }
+    .panel { max-height: none; padding: 13px; }
+    .block-list { max-height: none; }
+    .bl-time { width: 72px; font-size: 10.5px; }
+    .bl-del { opacity: 1; font-size: 17px; padding: 0 6px; }
     .editor-card {
       left: 8px; right: 8px; bottom: 8px;
       padding: 13px;
       gap: 9px;
     }
-    .inbox-item { padding: 12px 11px; }
-    .bl-del { opacity: 1; font-size: 17px; padding: 0 6px; }
     #ecTitle { font-size: 15px; padding: 10px 11px; }
     .ec-domains button { padding: 9px 0; }
     .ec-actions button { padding: 10px 0; }
+    .drawer-body { padding: 12px 16px 20px; }
+    .drawer-head { padding: 14px 16px 10px; }
   }
 </style>
 </head>
@@ -433,14 +507,13 @@
     <div class="brand"><div class="brand-mark"></div><span>日晷</span></div>
     <div class="header-mid">
       <span class="date-text" id="dateText"></span>
-      <span class="hint">拖任务到时间盘 · 拖块调整 · 拖把手改时长 · 点块可编辑</span>
+      <span class="hint desktop-only">拖任务到时间盘 · 拖块调整 · 拖把手改时长 · 点块可编辑</span>
     </div>
-    <div class="header-right">
-      <button id="reminderBtn" class="reminder-btn" title="开启提醒">🔔</button>
-      <div class="view-switch">
-        <button class="vs-btn active" data-view="ring">环形</button>
-        <button class="vs-btn" data-view="linear">线性</button>
-      </div>
+    <div class="header-tags">
+      <button class="header-tag active" data-view="ring">环形</button>
+      <button class="header-tag desktop-only" data-view="linear">线性</button>
+      <button class="header-tag mobile-only" id="addDrawerBtn">添加</button>
+      <button class="header-tag" id="reminderBtn">通知</button>
     </div>
   </header>
 
@@ -497,6 +570,29 @@
   </main>
 </div>
 
+<!-- 添加抽屉（手机端） -->
+<div class="add-drawer" id="addDrawer" hidden>
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+  <div class="drawer-panel">
+    <div class="drawer-head">
+      <h3>添加任务</h3>
+      <button class="drawer-close" id="drawerClose" title="关闭">×</button>
+    </div>
+    <div class="drawer-body">
+      <div class="domain-pick" id="drawerDomainPick">
+        <button data-domain="work" class="active">工作</button>
+        <button data-domain="study">学习</button>
+        <button data-domain="life">生活</button>
+      </div>
+      <div class="input-row">
+        <input type="text" id="drawerInput" placeholder="输入任务，回车添加" maxlength="24">
+        <button id="drawerAddBtn" title="添加">+</button>
+      </div>
+      <div class="drawer-inbox" id="drawerInbox"></div>
+    </div>
+  </div>
+</div>
+
 <script>
 (function () {
   'use strict';
@@ -505,9 +601,9 @@
   const NS = 'http://www.w3.org/2000/svg';
   const CX = 200, CY = 200, R_OUT = 178, R_IN = 106;
   const R_MID = (R_OUT + R_IN) / 2;
-  const SNAP = 15;
   const MIN_DUR = 15;
-  const STORAGE_KEY = 'rign-plan-v2';
+  const STORAGE_KEY = 'rign-plan-v3';
+  const LONG_PRESS_MS = 550;
 
   const DOMAIN_META = {
     work:  { label: '工作' },
@@ -548,6 +644,7 @@
   const taskInput  = document.getElementById('taskInput');
   const domainPick = document.getElementById('domainPick');
   const reminderBtn= document.getElementById('reminderBtn');
+  const addDrawerBtn = document.getElementById('addDrawerBtn');
 
   const editorCard = document.getElementById('editorCard');
   const ecTitle    = document.getElementById('ecTitle');
@@ -556,6 +653,14 @@
   const ecDelete   = document.getElementById('ecDelete');
   const ecDomains  = document.getElementById('ecDomains');
   const ecDomainLabel = document.getElementById('ecDomainLabel');
+
+  const addDrawer  = document.getElementById('addDrawer');
+  const drawerBackdrop = document.getElementById('drawerBackdrop');
+  const drawerClose= document.getElementById('drawerClose');
+  const drawerInput= document.getElementById('drawerInput');
+  const drawerAddBtn = document.getElementById('drawerAddBtn');
+  const drawerInbox= document.getElementById('drawerInbox');
+  const drawerDomainPick = document.getElementById('drawerDomainPick');
 
   // ==================== 工具 ====================
   function el(tag, attrs) {
@@ -571,17 +676,32 @@
     const p = polarXY(r, min);
     return p[0].toFixed(2) + ' ' + p[1].toFixed(2);
   }
-  function fmt(min) {
-    min = Math.floor(min);
-    if (min >= 1440) return '24:00';
-    let m = ((min % 1440) + 1440) % 1440;
-    const h = Math.floor(m / 60), mm = m % 60;
-    return String(h).padStart(2, '0') + ':' + String(mm).padStart(2, '0');
+  function fmtHM(min) {
+    const totalSec = Math.round(min * 60);
+    let s = ((totalSec % 86400) + 86400) % 86400;
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
   }
-  function snap(m) { return Math.round(m / SNAP) * SNAP; }
+  function fmtHMS(min) {
+    const totalSec = Math.round(min * 60);
+    let s = ((totalSec % 86400) + 86400) % 86400;
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const sec = s % 60;
+    return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(sec).padStart(2, '0');
+  }
+  function normalizeMin(m) {
+    return ((m % 1440) + 1440) % 1440;
+  }
+  // 秒级精度
+  function snap(m) {
+    return Math.round(m * 60) / 60;
+  }
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
   function getBlock(id) { return state.blocks.find(b => b.id === id); }
   function truncate(s, n) { return s.length > n ? s.slice(0, n) + '…' : s; }
+  function isMobile() { return window.matchMedia('(max-width: 720px)').matches; }
 
   function toSvg(evt) {
     const r = svg.getBoundingClientRect();
@@ -597,14 +717,55 @@
   }
   function distFromCenter(x, y) { return Math.hypot(x - CX, y - CY); }
 
-  function blockToPath(b) {
-    const s = b.start, e = b.end;
+  // 将块拆分为可见片段
+  function getBlockSegments(b) {
+    const dur = b.end - b.start;
+    if (dur <= 0) return [];
+    if (dur >= 1440) return [{ start: 0, end: 1440 }];
+    const s = normalizeMin(b.start);
+    const e = s + dur;
+    if (e <= 1440) {
+      return [{ start: s, end: e }];
+    }
+    return [
+      { start: s, end: 1440 },
+      { start: 0, end: e - 1440 }
+    ];
+  }
+
+  function segmentToPath(seg) {
+    const s = seg.start, e = seg.end;
+    if (e - s <= 0) return '';
     const large = (e - s) > 720 ? 1 : 0;
     return 'M ' + polar(R_OUT, s) +
            ' A ' + R_OUT + ' ' + R_OUT + ' 0 ' + large + ' 1 ' + polar(R_OUT, e) +
            ' L ' + polar(R_IN, e) +
            ' A ' + R_IN + ' ' + R_IN + ' 0 ' + large + ' 0 ' + polar(R_IN, s) + ' Z';
   }
+
+  function blocksOverlap(a, b) {
+    if (a.id === b.id) return false;
+    const aDur = a.end - a.start;
+    const bDur = b.end - b.start;
+    if (aDur <= 0 || bDur <= 0) return false;
+    const aMid = a.start + aDur / 2;
+    const bMid = b.start + bDur / 2;
+    const wraps = Math.round((aMid - bMid) / 1440);
+    const bS = b.start + wraps * 1440;
+    const bE = b.end + wraps * 1440;
+    return a.start < bE && a.end > bS;
+  }
+
+  function isNowInBlock(b, nowMin) {
+    const dur = b.end - b.start;
+    if (dur <= 0) return false;
+    if (dur >= 1440) return true;
+    const bMid = (b.start + b.end) / 2;
+    const wraps = Math.round((bMid - nowMin) / 1440);
+    const n = nowMin + wraps * 1440;
+    return n >= b.start && n < b.end;
+  }
+
   function minutesByDomain() {
     const m = { work: 0, study: 0, life: 0 };
     state.blocks.forEach(b => { m[b.domain] += (b.end - b.start); });
@@ -627,7 +788,7 @@
             sound: state.reminder.sound
           }
         }));
-      } catch (e) { /* ignore quota */ }
+      } catch (e) {}
     }, 280);
   }
 
@@ -637,7 +798,6 @@
       if (!raw) return null;
       const d = JSON.parse(raw);
       if (!d || !Array.isArray(d.blocks) || !Array.isArray(d.tasks)) return null;
-
       let maxId = 0;
       [...d.blocks, ...d.tasks].forEach(x => {
         const n = parseInt(String(x.id).replace(/\D/g, ''), 10) || 0;
@@ -652,25 +812,30 @@
   function createBlockEl(b) {
     const g = el('g', { class: 'block', 'data-id': b.id, 'data-domain': b.domain });
 
-    const path = el('path', { class: 'block-path', d: blockToPath(b) });
-    g.appendChild(path);
+    // 两个可能的路径（跨越0点时显示为两段）
+    const p1 = el('path', { class: 'block-path' });
+    const p2 = el('path', { class: 'block-path', style: 'display:none' });
+    g.appendChild(p1);
+    g.appendChild(p2);
 
     const title = el('title');
-    title.textContent = b.title + '  ' + fmt(b.start) + '–' + fmt(b.end);
     g.appendChild(title);
-
-    const label = el('text', { class: 'block-label' });
-    g.appendChild(label);
 
     const hs = el('circle', { class: 'handle', r: 6.5, 'data-handle': 'start' });
     const he = el('circle', { class: 'handle', r: 6.5, 'data-handle': 'end' });
     g.appendChild(hs);
     g.appendChild(he);
 
-    path.addEventListener('pointerdown', e => {
-      if (e.pointerType === 'mouse' && e.button !== 0) return;
-      e.preventDefault(); e.stopPropagation();
-      startMove(b, e);
+    const label = el('text', { class: 'block-label' });
+    g.appendChild(label);
+
+    // 拖动：路径和把手
+    [p1, p2].forEach(p => {
+      p.addEventListener('pointerdown', e => {
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
+        e.preventDefault(); e.stopPropagation();
+        startMove(b, e);
+      });
     });
     hs.addEventListener('pointerdown', e => {
       e.preventDefault(); e.stopPropagation();
@@ -686,22 +851,39 @@
   }
 
   function updateBlockEl(g, b) {
-    const path = g.querySelector('.block-path');
-    path.setAttribute('d', blockToPath(b));
+    const segs = getBlockSegments(b);
+    const paths = g.querySelectorAll('.block-path');
 
-    const ps = polarXY(R_MID, b.start);
-    const pe = polarXY(R_MID, b.end);
+    if (segs.length === 0) {
+      paths[0].style.display = 'none';
+      paths[1].style.display = 'none';
+    } else if (segs.length === 1) {
+      paths[0].setAttribute('d', segmentToPath(segs[0]));
+      paths[0].style.display = '';
+      paths[1].style.display = 'none';
+    } else {
+      paths[0].setAttribute('d', segmentToPath(segs[0]));
+      paths[0].style.display = '';
+      paths[1].setAttribute('d', segmentToPath(segs[1]));
+      paths[1].style.display = '';
+    }
+
+    // 把手
+    const sPos = polarXY(R_MID, normalizeMin(b.start));
+    const ePos = polarXY(R_MID, normalizeMin(b.end));
     const hs = g.querySelector('[data-handle="start"]');
     const he = g.querySelector('[data-handle="end"]');
-    hs.setAttribute('cx', ps[0]); hs.setAttribute('cy', ps[1]);
-    he.setAttribute('cx', pe[0]); he.setAttribute('cy', pe[1]);
+    hs.setAttribute('cx', sPos[0]); hs.setAttribute('cy', sPos[1]);
+    he.setAttribute('cx', ePos[0]); he.setAttribute('cy', ePos[1]);
 
+    // 标签
     const label = g.querySelector('.block-label');
     const dur = b.end - b.start;
     if (dur >= 120) {
-      const pm = polarXY(R_MID, (b.start + b.end) / 2);
-      label.setAttribute('x', pm[0]);
-      label.setAttribute('y', pm[1]);
+      const mid = normalizeMin(b.start + dur / 2);
+      const lm = polarXY(R_MID, mid);
+      label.setAttribute('x', lm[0]);
+      label.setAttribute('y', lm[1]);
       label.textContent = truncate(b.title, 6);
       label.style.display = '';
     } else {
@@ -709,7 +891,7 @@
     }
 
     const t = g.querySelector('title');
-    if (t) t.textContent = b.title + '  ' + fmt(b.start) + '–' + fmt(b.end);
+    if (t) t.textContent = b.title + ' ' + fmtHM(b.start) + '–' + fmtHM(b.end);
   }
 
   function renderRing() {
@@ -755,7 +937,7 @@
       ticks.appendChild(t);
     }
 
-    // 半小时：短刻度，比整点短
+    // 半小时：短刻度
     for (let h = 0; h < 24; h++) {
       const min = h * 60 + 30;
       const p1 = polarXY(R_IN - 3, min);
@@ -771,7 +953,7 @@
 
     // 块
     const layer = el('g', { id: 'blockLayer' });
-    state.blocks.slice().sort((a, b) => a.start - b.start).forEach(b => {
+    state.blocks.slice().sort((a, b) => normalizeMin(a.start) - normalizeMin(b.start)).forEach(b => {
       const g = createBlockEl(b);
       if (b.id === state.selectedId) g.classList.add('selected');
       layer.appendChild(g);
@@ -801,7 +983,7 @@
       x: CX, y: CY - 28, fill: '#6b7486', 'font-size': 10.5,
       'text-anchor': 'middle', 'letter-spacing': '.06em'
     });
-    c1.textContent = '现在 ' + fmt(nowMin);
+    c1.textContent = '现在 ' + fmtHM(nowMin);
     svg.appendChild(c1);
 
     const c2 = el('text', {
@@ -821,7 +1003,6 @@
     refreshConflicts();
   }
 
-  // 实时更新指针与中心时间
   function updateNowLayer() {
     const now = new Date();
     const nowMin = now.getHours() * 60 + now.getMinutes() + now.getSeconds() / 60;
@@ -836,16 +1017,15 @@
       dot.setAttribute('cx', n2[0]); dot.setAttribute('cy', n2[1]);
     }
     const tt = svg.querySelector('#nowTimeText');
-    if (tt) tt.textContent = '现在 ' + fmt(nowMin);
+    if (tt) tt.textContent = '现在 ' + fmtHM(nowMin);
   }
 
-  // 进行中进程发光
   function updateActiveBlocks() {
     const now = new Date();
     const nowMin = now.getHours() * 60 + now.getMinutes() + now.getSeconds() / 60;
 
     state.blocks.forEach(b => {
-      const active = nowMin >= b.start && nowMin < b.end;
+      const active = isNowInBlock(b, nowMin);
       const g = svg.querySelector('.block[data-id="' + b.id + '"]');
       if (g) g.classList.toggle('active', active);
       const lin = linearInner.querySelector('.lin-block[data-id="' + b.id + '"]');
@@ -858,7 +1038,7 @@
   function refreshConflicts() {
     const bs = state.blocks;
     bs.forEach(b => {
-      const c = bs.some(o => o.id !== b.id && o.start < b.end && o.end > b.start);
+      const c = bs.some(o => blocksOverlap(b, o));
       const g = svg.querySelector('.block[data-id="' + b.id + '"]');
       if (g) g.classList.toggle('conflict', c);
       const lin = linearInner.querySelector('.lin-block[data-id="' + b.id + '"]');
@@ -890,8 +1070,14 @@
       d.className = 'lin-block';
       d.dataset.id = b.id;
       d.dataset.domain = b.domain;
-      d.style.top = (b.start / 1440 * H) + 'px';
-      d.style.height = Math.max(15, (b.end - b.start) / 1440 * H - 2) + 'px';
+
+      const segs = getBlockSegments(b);
+      if (segs.length === 0) return;
+
+      // 用第一段（或主段）定位
+      const mainSeg = segs[0];
+      d.style.top = (mainSeg.start / 1440 * H) + 'px';
+      d.style.height = Math.max(15, ((mainSeg.end - mainSeg.start) / 1440 * H) - 2) + 'px';
       if (b.id === state.selectedId) d.classList.add('selected');
 
       const t = document.createElement('div');
@@ -899,7 +1085,7 @@
       t.textContent = b.title;
       const m = document.createElement('div');
       m.className = 'lb-m';
-      m.textContent = fmt(b.start) + '–' + fmt(b.end);
+      m.textContent = fmtHM(b.start) + '–' + fmtHM(b.end);
       d.appendChild(t); d.appendChild(m);
 
       d.addEventListener('click', () => selectBlock(b.id));
@@ -984,7 +1170,7 @@
     let n = 0;
     for (let i = 0; i < bs.length; i++)
       for (let j = i + 1; j < bs.length; j++)
-        if (bs[i].start < bs[j].end && bs[i].end > bs[j].start) n++;
+        if (blocksOverlap(bs[i], bs[j])) n++;
     return n;
   }
 
@@ -1031,7 +1217,7 @@
       return;
     }
 
-    state.blocks.slice().sort((a, b) => a.start - b.start).forEach(b => {
+    state.blocks.slice().sort((a, b) => normalizeMin(a.start) - normalizeMin(b.start)).forEach(b => {
       const d = document.createElement('div');
       d.className = 'bl-item' + (b.id === state.selectedId ? ' selected' : '');
       d.dataset.id = b.id;
@@ -1042,7 +1228,7 @@
 
       const time = document.createElement('span');
       time.className = 'bl-time';
-      time.textContent = fmt(b.start) + '–' + fmt(b.end);
+      time.textContent = fmtHM(b.start) + '–' + fmtHM(b.end);
 
       const title = document.createElement('span');
       title.className = 'bl-title';
@@ -1063,13 +1249,48 @@
     });
   }
 
+  function renderDrawerInbox() {
+    drawerInbox.innerHTML = '';
+    if (!state.tasks.length) {
+      const e = document.createElement('div');
+      e.className = 'drawer-empty';
+      e.textContent = '待安排清空了\n在下面输入框添加新任务';
+      drawerInbox.appendChild(e);
+      return;
+    }
+
+    state.tasks.forEach(t => {
+      const d = document.createElement('div');
+      d.className = 'drawer-task';
+      d.dataset.domain = t.domain;
+
+      const title = document.createElement('span');
+      title.className = 'dt-title';
+      title.textContent = t.title;
+
+      const dur = document.createElement('span');
+      dur.className = 'dt-dur';
+      dur.textContent = t.estimate + 'min';
+
+      const btn = document.createElement('button');
+      btn.className = 'dt-add';
+      btn.title = '添加到日晷';
+      btn.textContent = '+';
+      btn.addEventListener('click', () => autoPlaceTask(t));
+
+      d.appendChild(title); d.appendChild(dur); d.appendChild(btn);
+      drawerInbox.appendChild(d);
+    });
+  }
+
   // ==================== 总渲染 ====================
   function render() {
     renderRing();
-    renderLinear();
+    if (!linearView.hidden) renderLinear();
     renderBalance();
     renderInbox();
     renderBlockList();
+    renderDrawerInbox();
     updateActiveBlocks();
   }
 
@@ -1077,13 +1298,6 @@
   function applySelectionClass(id) {
     svg.querySelectorAll('.block').forEach(g => g.classList.toggle('selected', g.dataset.id === id));
     linearInner.querySelectorAll('.lin-block').forEach(d => d.classList.toggle('selected', d.dataset.id === id));
-  }
-
-  function setSelection(id) {
-    state.selectedId = id;
-    applySelectionClass(id);
-    renderBlockList();
-    updateActiveBlocks();
   }
 
   function selectBlock(id) {
@@ -1102,7 +1316,7 @@
     editorCard.dataset.domain = b.domain;
     ecDomainLabel.textContent = DOMAIN_META[b.domain].label;
     ecTitle.value = b.title;
-    ecTime.textContent = fmt(b.start) + ' – ' + fmt(b.end) + ' · ' + (b.end - b.start) + ' 分钟';
+    ecTime.textContent = fmtHMS(b.start) + ' – ' + fmtHMS(b.end) + ' · ' + Math.round(b.end - b.start) + ' 分钟';
     ecDomains.querySelectorAll('button').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.domain === b.domain);
     });
@@ -1159,32 +1373,66 @@
     drag = {
       type: 'move',
       blockId: b.id,
-      grabMin: minutesAt(p.x, p.y),
+      lastMin: minutesAt(p.x, p.y),
       origStart: b.start,
       origEnd: b.end,
+      totalDelta: 0,
+      startX: evt.clientX,
+      startY: evt.clientY,
+      moved: false,
+      longPressTimer: null,
+      cancelled: false
+    };
+    setSelectionOnly(b.id);
+
+    if (isMobile()) {
+      drag.longPressTimer = setTimeout(() => {
+        if (drag && !drag.moved) {
+          drag.cancelled = true;
+          selectBlock(b.id);
+          if (navigator.vibrate) { try { navigator.vibrate(30); } catch (e) {} }
+        }
+      }, LONG_PRESS_MS);
+    }
+  }
+
+  function startResize(b, evt, which) {
+    drag = {
+      type: 'resize-' + which,
+      blockId: b.id,
       startX: evt.clientX,
       startY: evt.clientY,
       moved: false
     };
-    setSelection(b.id);
+    setSelectionOnly(b.id);
     hideEditorCard();
   }
 
-  function startResize(b, evt, which) {
-    drag = { type: 'resize-' + which, blockId: b.id, startX: evt.clientX, startY: evt.clientY, moved: false };
-    setSelection(b.id);
-    hideEditorCard();
+  function setSelectionOnly(id) {
+    state.selectedId = id;
+    applySelectionClass(id);
+    renderBlockList();
+    updateActiveBlocks();
   }
 
   // ==================== 全局拖拽处理 ====================
   function onPointerMove(evt) {
     if (!drag) return;
 
-    if (drag.startX != null) {
+    // 移动检测
+    if (drag.startX != null && !drag.moved) {
       const dx = evt.clientX - drag.startX;
       const dy = evt.clientY - drag.startY;
-      if (Math.hypot(dx, dy) > 4) drag.moved = true;
+      if (Math.hypot(dx, dy) > 5) {
+        drag.moved = true;
+        if (drag.longPressTimer) {
+          clearTimeout(drag.longPressTimer);
+          drag.longPressTimer = null;
+        }
+      }
     }
+
+    if (drag.cancelled) return;
 
     if (drag.type === 'inbox') {
       moveGhost(evt.clientX, evt.clientY);
@@ -1207,39 +1455,48 @@
     if (!b) return;
 
     const p = toSvg(evt);
-    if (distFromCenter(p.x, p.y) > R_OUT + 140) return;
-    const cur = minutesAt(p.x, p.y);
 
     if (drag.type === 'move') {
-      let delta = cur - drag.grabMin;
-      if (delta > 720) delta -= 1440;
-      if (delta < -720) delta += 1440;
+      if (distFromCenter(p.x, p.y) > R_OUT + 160) return;
+      const cur = minutesAt(p.x, p.y);
+      let step = cur - drag.lastMin;
+      if (step > 720) step -= 1440;
+      if (step < -720) step += 1440;
+      drag.totalDelta = clamp(drag.totalDelta + step, -1440, 1440);
+      drag.lastMin = cur;
 
-      const dur = drag.origEnd - drag.origStart;
-      let ns = snap(drag.origStart + delta);
-      ns = clamp(ns, 0, 1440 - dur);
+      b.start = snap(drag.origStart + drag.totalDelta);
+      b.end = snap(drag.origEnd + drag.totalDelta);
 
-      b.start = ns;
-      b.end = ns + dur;
+      const g = svg.querySelector('.block[data-id="' + b.id + '"]');
+      if (g) updateBlockEl(g, b);
+      refreshConflicts();
 
     } else if (drag.type === 'resize-start') {
-      let m = snap(cur);
-      if (b.end > 720 && (m > 1425 || m < 15)) m = 0;
-      b.start = clamp(m, 0, b.end - MIN_DUR);
+      const cur = minutesAt(p.x, p.y);
+      let ns = snap(cur);
+      if (b.end > 720 && (ns > 1425 || ns < 15)) ns = 0;
+      if (ns > b.end - MIN_DUR) ns = snap(b.end - MIN_DUR);
+      b.start = ns;
+      const g = svg.querySelector('.block[data-id="' + b.id + '"]');
+      if (g) updateBlockEl(g, b);
+      refreshConflicts();
 
     } else if (drag.type === 'resize-end') {
-      let m = snap(cur);
-      if (b.start > 720 && (m > 1425 || m < 30)) m = 1440;
-      b.end = clamp(m, b.start + MIN_DUR, 1440);
+      const cur = minutesAt(p.x, p.y);
+      let ne = snap(cur);
+      if (b.start > 720 && (ne > 1425 || ne < 30)) ne = 1440;
+      if (ne < b.start + MIN_DUR) ne = snap(b.start + MIN_DUR);
+      b.end = ne;
+      const g = svg.querySelector('.block[data-id="' + b.id + '"]');
+      if (g) updateBlockEl(g, b);
+      refreshConflicts();
     }
-
-    const g = svg.querySelector('.block[data-id="' + b.id + '"]');
-    if (g) updateBlockEl(g, b);
-    refreshConflicts();
   }
 
   function onPointerUp() {
     if (!drag) return;
+    if (drag.longPressTimer) clearTimeout(drag.longPressTimer);
 
     if (drag.type === 'inbox') {
       if (drag.previewStart != null) {
@@ -1270,18 +1527,41 @@
       return;
     }
 
-    // 移动 / 调整结束
     const wasMove = drag.type === 'move';
     const blockId = drag.blockId;
     const moved = drag.moved;
+    const cancelled = drag.cancelled;
     drag = null;
     document.body.style.cursor = '';
-    render();
-    scheduleSave();
 
-    if (wasMove && !moved) {
-      // 轻点：打开编辑卡片
-      selectBlock(blockId);
+    if (wasMove) {
+      if (cancelled) return; // 长按已触发编辑卡片
+
+      if (moved) {
+        normalizeBlockPos(blockId);
+        render();
+        scheduleSave();
+      } else {
+        if (!isMobile()) selectBlock(blockId);
+      }
+    } else {
+      // resize 结束
+      if (moved) {
+        render();
+        scheduleSave();
+      }
+    }
+  }
+
+  function normalizeBlockPos(id) {
+    const b = getBlock(id);
+    if (!b) return;
+    const dur = b.end - b.start;
+    if (dur >= 1440) return;
+    if (b.start < -720 || b.start > 2160) {
+      const s = normalizeMin(b.start);
+      b.start = s;
+      b.end = s + dur;
     }
   }
 
@@ -1295,9 +1575,8 @@
     previewEl.innerHTML = '';
     previewEl.setAttribute('data-domain', domain);
 
-    const b = { start: s, end: e };
     const p = el('path', {
-      d: blockToPath(b),
+      d: segmentToPath({ start: s, end: e }),
       fill: 'rgba(255,255,255,.10)',
       stroke: 'rgba(255,255,255,.55)',
       'stroke-width': 1.5,
@@ -1312,7 +1591,7 @@
       'text-anchor': 'middle', 'dominant-baseline': 'middle',
       'pointer-events': 'none'
     });
-    t.textContent = fmt(s) + '–' + fmt(e);
+    t.textContent = fmtHM(s) + '–' + fmtHM(e);
     previewEl.appendChild(t);
   }
   function hidePreview() {
@@ -1321,16 +1600,72 @@
 
   // ==================== 视图切换 ====================
   function setView(v) {
+    if (isMobile() && v === 'linear') v = 'ring';
     state.view = v;
     ringView.hidden = v !== 'ring';
     linearView.hidden = v !== 'linear';
-    document.querySelectorAll('.vs-btn').forEach(btn => {
+    document.querySelectorAll('[data-view]').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.view === v);
     });
     if (v === 'linear') {
       renderLinear();
       updateActiveBlocks();
     }
+  }
+
+  // ==================== 手机端添加抽屉 ====================
+  function openDrawer() {
+    addDrawer.hidden = false;
+    renderDrawerInbox();
+  }
+  function closeDrawer() {
+    addDrawer.hidden = true;
+  }
+
+  function autoPlaceTask(task) {
+    const dur = task.estimate || 60;
+    const slot = findFreeSlot(dur);
+    const newId = nid();
+    state.blocks.push({
+      id: newId,
+      title: task.title,
+      domain: task.domain,
+      start: slot.start,
+      end: slot.end
+    });
+    state.tasks = state.tasks.filter(x => x.id !== task.id);
+    render();
+    scheduleSave();
+    if (navigator.vibrate) { try { navigator.vibrate(20); } catch (e) {} }
+  }
+
+  function findFreeSlot(dur) {
+    const now = new Date();
+    let candidate = Math.ceil((now.getHours() * 60 + now.getMinutes()) / 15) * 15;
+    if (candidate < 540) candidate = 540;
+
+    for (let attempt = 0; attempt < 80; attempt++) {
+      if (candidate + dur > 1440) candidate = 540;
+
+      let conflictEnd = null;
+      for (const b of state.blocks) {
+        const bS = normalizeMin(b.start);
+        const bDur = b.end - b.start;
+        for (const pos of [bS, bS - 1440, bS + 1440]) {
+          if (candidate < pos + bDur && candidate + dur > pos) {
+            const end = pos + bDur;
+            if (conflictEnd === null || end > conflictEnd) conflictEnd = end;
+          }
+        }
+      }
+
+      if (conflictEnd === null) {
+        return { start: normalizeMin(candidate), end: normalizeMin(candidate) + dur };
+      }
+      candidate = Math.ceil(conflictEnd / 15) * 15;
+    }
+
+    return { start: normalizeMin(candidate), end: normalizeMin(candidate) + dur };
   }
 
   // ==================== 提醒系统 ====================
@@ -1376,25 +1711,23 @@
       u.rate = 1.02;
       u.volume = 1;
       speechSynthesis.speak(u);
-    } catch (e) { /* ignore */ }
+    } catch (e) {}
   }
 
   function sendNotification(title, body, tag) {
     if (!('Notification' in window) || Notification.permission !== 'granted') return;
     try {
       new Notification(title, { body: body, tag: tag, silent: false });
-    } catch (e) { /* ignore */ }
+    } catch (e) {}
   }
 
   function notifyBlock(b, type) {
     const isStart = type === 'start';
     const title = isStart ? '开始：' + b.title : '结束：' + b.title;
-    const body = fmt(b.start) + '–' + fmt(b.end) + ' · ' + DOMAIN_META[b.domain].label;
+    const body = fmtHM(b.start) + '–' + fmtHM(b.end) + ' · ' + DOMAIN_META[b.domain].label;
 
     if (state.reminder.sound) playChime(type);
-    if (state.reminder.voice) {
-      speak(isStart ? '现在开始，' + b.title : '已完成，' + b.title);
-    }
+    if (state.reminder.voice) speak(isStart ? '现在开始，' + b.title : '已完成，' + b.title);
     sendNotification(isStart ? '日晷 · 开始提醒' : '日晷 · 结束提醒', title + '（' + body + '）', b.id + '-' + type);
   }
 
@@ -1414,13 +1747,14 @@
       if (!state.alerted[b.id]) state.alerted[b.id] = {};
       const a = state.alerted[b.id];
 
-      // 开始：开始前 1 分钟到开始后 1 分钟的窗口
-      if (!a.start && nowMin >= b.start - 1 && nowMin <= b.start + 1) {
+      const bS = normalizeMin(b.start);
+      const bE = b.end - b.start > 0 ? bS + (b.end - b.start) : bS;
+
+      if (!a.start && nowMin >= bS - 1 && nowMin <= bS + 1) {
         a.start = true;
         notifyBlock(b, 'start');
       }
-      // 结束：结束前后 1 分钟窗口
-      if (!a.end && nowMin >= b.end - 1 && nowMin <= b.end + 1) {
+      if (!a.end && nowMin >= normalizeMin(b.end) - 1 && nowMin <= normalizeMin(b.end) + 1) {
         a.end = true;
         notifyBlock(b, 'end');
       }
@@ -1429,19 +1763,17 @@
 
   function updateReminderBtn() {
     reminderBtn.classList.toggle('on', state.reminder.enabled);
-    reminderBtn.title = state.reminder.enabled ? '提醒已开启（点击关闭）' : '开启进程提醒';
+    reminderBtn.title = state.reminder.enabled ? '通知已开启（点击关闭）' : '开启进程提醒';
   }
 
   async function toggleReminder() {
     if (!state.reminder.enabled) {
-      // 开启：请求通知权限、解锁音频
       if ('Notification' in window && Notification.permission === 'default') {
         try { await Notification.requestPermission(); } catch (e) {}
       }
       getAudioCtx();
       playChime('start');
-      setTimeout(() => speak('提醒已开启'), 500);
-
+      setTimeout(() => speak('通知已开启'), 500);
       state.reminder.enabled = true;
       state.reminder.day = new Date().toDateString();
       state.alerted = {};
@@ -1467,11 +1799,10 @@
   window.addEventListener('pointerup', onPointerUp);
   window.addEventListener('pointercancel', onPointerUp);
 
-  document.querySelectorAll('.vs-btn').forEach(btn => {
+  document.querySelectorAll('[data-view]').forEach(btn => {
     btn.addEventListener('click', () => setView(btn.dataset.view));
   });
 
-  // 点击空白取消选中
   svg.addEventListener('pointerdown', e => {
     const t = e.target;
     if (t === svg || (t.tagName === 'circle' && !t.classList.contains('handle'))) {
@@ -1479,7 +1810,6 @@
     }
   });
 
-  // 键盘删除
   window.addEventListener('keydown', e => {
     if ((e.key === 'Delete' || e.key === 'Backspace') && state.selectedId) {
       const tag = document.activeElement && document.activeElement.tagName;
@@ -1490,7 +1820,7 @@
     if (e.key === 'Escape') selectBlock(null);
   });
 
-  // 新建任务
+  // 桌面端新建任务
   let currentDomain = 'work';
   domainPick.addEventListener('click', e => {
     const btn = e.target.closest('button');
@@ -1507,6 +1837,7 @@
     state.tasks.push({ id: nid(), title: v, domain: currentDomain, estimate: 60 });
     taskInput.value = '';
     renderInbox();
+    renderDrawerInbox();
     scheduleSave();
   }
   document.getElementById('addBtn').addEventListener('click', addTask);
@@ -1514,7 +1845,36 @@
     if (e.key === 'Enter') { e.preventDefault(); addTask(); }
   });
 
-  // 编辑卡片：改名
+  // 手机端抽屉
+  addDrawerBtn.addEventListener('click', openDrawer);
+  drawerClose.addEventListener('click', closeDrawer);
+  drawerBackdrop.addEventListener('click', closeDrawer);
+
+  let drawerDomain = 'work';
+  drawerDomainPick.addEventListener('click', e => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    drawerDomain = btn.dataset.domain;
+    drawerDomainPick.querySelectorAll('button').forEach(b => {
+      b.classList.toggle('active', b === btn);
+    });
+  });
+
+  function drawerAddTask() {
+    const v = drawerInput.value.trim();
+    if (!v) return;
+    state.tasks.push({ id: nid(), title: v, domain: drawerDomain, estimate: 60 });
+    drawerInput.value = '';
+    renderInbox();
+    renderDrawerInbox();
+    scheduleSave();
+  }
+  drawerAddBtn.addEventListener('click', drawerAddTask);
+  drawerInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); drawerAddTask(); }
+  });
+
+  // 编辑卡片
   ecTitle.addEventListener('input', () => {
     if (!state.selectedId) return;
     const b = getBlock(state.selectedId);
@@ -1528,7 +1888,6 @@
     scheduleSave();
   });
 
-  // 编辑卡片：切换域
   ecDomains.addEventListener('click', e => {
     const btn = e.target.closest('button');
     if (!btn || !state.selectedId) return;
@@ -1545,7 +1904,6 @@
     scheduleSave();
   });
 
-  // 编辑卡片：删除 / 关闭
   ecDelete.addEventListener('click', () => {
     if (!state.selectedId) return;
     removeBlock(state.selectedId);
@@ -1555,14 +1913,19 @@
     selectBlock(null);
   });
 
-  // 提醒按钮
   reminderBtn.addEventListener('click', toggleReminder);
 
-  // 页面首次交互时解锁音频（若提醒已开启）
   function unlockAudioOnce() {
     if (state.reminder.enabled) getAudioCtx();
   }
   window.addEventListener('pointerdown', unlockAudioOnce, { once: true });
+
+  // 窗口大小变化：手机端强制环形
+  window.addEventListener('resize', () => {
+    if (isMobile() && state.view === 'linear') {
+      setView('ring');
+    }
+  });
 
   // ==================== 初始化 ====================
   function init() {
@@ -1601,7 +1964,7 @@
     setView('ring');
     tick();
 
-    setInterval(tick, 15000);
+    setInterval(tick, 10000);
   }
 
   init();
