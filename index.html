@@ -609,7 +609,7 @@
             }
         }
         .modal h2 {
-            font-size: 22px;
+            font-size: 20px;  /* ← 标题文字大小 */
             font-weight: 700;
             margin-bottom: 20px;
             display: flex;
@@ -1008,7 +1008,7 @@
                 user-select: none !important;
             }
             .tab-item i {
-                font-size: 19px !important; /* ====== 修改这里的数值！====== */
+                font-size: 22px !important; /* ====== 修改这里的数值！====== */
                 pointer-events: none !important;
             }
             .tab-item span {
@@ -1692,7 +1692,7 @@
     <div class="float-search-bar">
         <div class="float-search-input-wrap">
             <i class="fas fa-search"></i>
-            <input class="float-search-input" placeholder="搜索客户、公司、电话、行业、展会...">
+            <input class="float-search-input" placeholder="搜索客户.公司.电话.行业.展会...">
         </div>
         <button class="float-menu-btn"><i class="fas fa-ellipsis-v"></i></button>
     </div>
@@ -1838,7 +1838,7 @@
             </header>
 
             <div class="toolbar">
-                <div class="search-wrapper"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="搜索客户、公司、电话、行业、展会..."></div>
+                <div class="search-wrapper"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="搜索客户公司.电话.行业.展会..."></div>
                 <div class="select-group">
                     <div class="select-wrapper"><select id="industryFilter"><option value="">全部行业</option></select></div>
                     <div class="select-wrapper"><select id="exhibitionFilter"><option value="">全部展会</option></select></div>
@@ -1945,7 +1945,7 @@
         <div class="modal">
             <h2><i class="fas fa-info-circle"></i> 版权信息</h2>
             <div class="copyright-text">
-                <p>© 版本号：AnsonCRM2026.2.0</p>
+                <p>© 版本号：AnsonCRM2026.2.3</p>
                 <p>开发作者：Anson</p>
                 <p>联系QQ：59253359</p>
                 <p style="margin-top:12px;">系统版权归Anson所有，严禁私自篡改盗用</p>
@@ -2098,13 +2098,23 @@
         }
 
         // ===== 抽屉渲染函数（筛选、分组、统计、设置） =====
+
+function drawerHeader(title, iconClass) {
+    return `<div style="font-size:16px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:8px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+            <i class="fas ${iconClass}" style="color:#2563eb;font-size:18px;"></i> ${title}
+        </div>
+        <button class="btn btn-icon btn-sm btn-primary" onclick="closeDrawer()" title="关闭"
+                style="width:22px;height:22px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <i class="fas fa-times"></i>
+        </button>
+    </div>`;
+}
         function renderFilterDrawer() {
             const currentSelect = industryFilterEl.value;
             let html = `
             <div style="padding:0px 0;">
-                <div style="font-size:16px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
-                    <i class="fas fa-filter" style="color:#2563eb;font-size:18px;"></i> 筛选 - 行业
-                </div>
+                ${drawerHeader('筛选 - 行业', 'fa-filter')}
                 <div style="height:1px;background:var(--border-light);margin:12px 0;"></div>
                 <div style="display:flex;flex-direction:column;gap:8px;">
                     <div class="drawer-filter-item" data-industry="" style="display:flex;justify-content:space-between;align-items:center;padding:4px 10px;background:#f1f3f5;border-radius:12px;cursor:pointer;transition:0.18s;">
@@ -2167,9 +2177,7 @@
             if (!exhibitionList || exhibitionList.length === 0) {
                 drawerContent.innerHTML = `
                 <div style="padding:0px 0;">
-                    <div style="font-size:16px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
-                        <i class="fas fa-list" style="color:#2563eb;font-size:18px;"></i> 分组 - 展会
-                    </div>
+                    ${drawerHeader('分组 - 展会', 'fa-list')}
                     <div style="height:1px;background:var(--border-light);margin:12px 0;"></div>
                     <div style="color:#94a3b8;padding:12px;text-align:center;font-size:14px;">暂无展会分类，请先添加</div>
                 </div>`;
@@ -2178,9 +2186,7 @@
             const currentSelect = exhibitionFilterEl.value;
             let html = `
             <div style="padding:0px 0;">
-                <div style="font-size:16px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
-                    <i class="fas fa-list" style="color:#2563eb;font-size:18px;"></i> 分组 - 展会
-                </div>
+                ${drawerHeader('分组 - 展会', 'fa-list')}
                 <div style="height:1px;background:var(--border-light);margin:12px 0;"></div>
 
                 <div style="display:flex;flex-direction:column;gap:8px;">
@@ -2327,9 +2333,7 @@
 
             let html = `
             <div style="padding:0px 0;">
-                <div style="font-size:16px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
-                    <i class="fas fa-chart-pie" style="color:#2563eb;font-size:18px;"></i> 数据统计
-                </div>
+                ${drawerHeader('数据统计', 'fa-chart-pie')}
                 <div style="height:1px;background:var(--border-light);margin:12px 0;"></div>
                 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;">
                     <div style="background:#ffffff;padding:10px 8px;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,0.10);border-left:3px solid #2563eb;">
@@ -2375,9 +2379,7 @@
         function renderSettingDrawer() {
             let html = `
             <div style="padding:0px 0;">
-                <div style="font-size:16px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
-                    <i class="fas fa-cog" style="color:#2563eb;font-size:18px;"></i> 设置
-                </div>
+                ${drawerHeader('设置', 'fa-cog')}
                 <div style="height:1px;background:var(--border-light);margin:12px 0;"></div>
                 <div style="font-size:14px;font-weight:600;margin:0 0 8px 0;color:#334155;display:flex;align-items:center;gap:6px;">
                     <i class="fas fa-tags" style="color:#64748b;font-size:13px;"></i> 分类管理
